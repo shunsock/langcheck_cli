@@ -1,0 +1,21 @@
+[project]
+name = "langcheck_cli"
+version = "0.1.0"
+description = "langcheck cli"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "langcheck[ja]>=0.7.1",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv]
+dev-dependencies = [
+    "pytest>=8.3.2",
+]
+
+[project.scripts]
+langcheck = "langcheck_cli:main"
