@@ -1,8 +1,9 @@
 import sys
 
-from langcheck_cli.controller.check_metrics import CheckMetrics
+from langcheck_cli.controller.argument import Argument
 from langcheck_cli.controller.controller import Controller
 from langcheck_cli.controller.help_message import HelpMessage
+from langcheck_cli.controller.metrics import Metrics
 
 
 class Router:
@@ -17,12 +18,9 @@ class Router:
         match option:
             case "-h" | "--help":
                 return HelpMessage()
-            case "-p" | "--path":
-                if len(sys.argv[2]) < 3:
-                    raise ValueError(
-                        "input values are too short. use -h or --help options"
-                    )
-
-                return CheckMetrics(sys.argv[2])
+            case "argument":
+                return Argument(sys.argv[2:])
+            case "metrics":
+                return Metrics(sys.argv[2:])
             case _:
                 raise ValueError("input values are invalid. use -h or --help options")

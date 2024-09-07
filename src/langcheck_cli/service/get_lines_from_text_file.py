@@ -14,7 +14,7 @@ class GetLinesFromTextFile:
             List[str]: ファイルの各行を要素とするリスト。
         """
         try:
-            with open(file_path, 'r', encoding='utf-8') as file:
+            with open(file_path, "r", encoding="utf-8") as file:
                 lines = file.readlines()
                 # 各行の末尾の改行文字を削除したい場合は以下の行を追加
                 lines = [line.strip() for line in lines]
