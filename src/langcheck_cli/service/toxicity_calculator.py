@@ -1,6 +1,9 @@
 from typing import List
 
 import langcheck
+import warnings
+
+warnings.filterwarnings("ignore", category=FutureWarning)
 
 
 class ToxicityCalculator:
