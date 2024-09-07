@@ -1,0 +1,4 @@
+good, this is a good idea.
+This is a good idea; it works well.
+That idea doesn't make much sense.
+This is stupid; it doesn't work completely.

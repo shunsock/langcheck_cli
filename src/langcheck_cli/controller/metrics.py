@@ -2,11 +2,19 @@ from pathlib import Path
 from typing import List, Optional
 
 from langcheck_cli.controller.controller import Controller
+from langcheck_cli.service.ai_disclaimer_similarity_calculator import (
+    AiDisclaimerSimilarityCalculator,
+)
+from langcheck_cli.service.get_lines_from_text_file import GetLinesFromTextFile
+from langcheck_cli.service.sentiment_calculator import SentimentCalculator
+from langcheck_cli.service.toxicity_calculator import ToxicityCalculator
 
 
 class Metrics(Controller):
     command: Optional[str] = None
     path: Optional[Path] = None
+    threshold: Optional[float] = None
+    upper_than: bool = False
 
     def __init__(self, user_inputs: List[str]) -> None:
         super().__init__()
@@ -42,6 +50,18 @@ class Metrics(Controller):
                     Metrics.command = value
                 case "-f" | "--file":
                     Metrics.path = Path(value)
+                case "-u" | "--upper-than":
+                    if not value.replace(".", "", 1).isdigit():
+                        raise ValueError(f"flag {value} requires a float value")
+
+                    Metrics.threshold = float(value)
+                    Metrics.upper_than = True
+                case "-l" | "--lower-than":
+                    if not value.replace(".", "", 1).isdigit():
+                        raise ValueError(f"flag {value} requires a float value")
+
+                    Metrics.threshold = float(value)
+                    Metrics.upper_than = False
                 case _:
                     raise ValueError(f"flag {flag} is invalid")
 
@@ -77,6 +97,20 @@ class Metrics(Controller):
                 raise ValueError(f"command {Metrics.command} is invalid")
 
     def run(self) -> None:
-        print("from Metrics")
-        print(f"command: {Metrics.command}")
-        print(f"path: {Metrics.path}")
+        texts = GetLinesFromTextFile.read_file_lines(str(Metrics.path))
+
+        match Metrics.command:
+            case "toxicity":
+                ToxicityCalculator.calculate(
+                    texts, Metrics.threshold, Metrics.upper_than
+                )
+            case "sentiment":
+                SentimentCalculator.calculate(
+                    texts, Metrics.threshold, Metrics.upper_than
+                )
+            case "ai_disclaimer_similarity":
+                AiDisclaimerSimilarityCalculator.calculate(
+                    texts, Metrics.threshold, Metrics.upper_than
+                )
+            case _:
+                pass
