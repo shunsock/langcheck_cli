@@ -15,6 +15,16 @@ class Metrics(Controller):
 
     @staticmethod
     def parse(user_inputs: List[str]) -> None:
+        """
+        Parse user inputs to set the command and path.
+        This method is called internally to parse the user inputs and set the command and path.
+
+        Parameters:
+            user_inputs (List[str]): List of user inputs
+
+        Raises:
+            ValueError: if a flag is invalid
+        """
         # parse user inputs
         index: int = 0
         last_index: int = len(user_inputs) - 1
@@ -40,7 +50,15 @@ class Metrics(Controller):
 
     @staticmethod
     def validate() -> None:
+        """
+        Validate the command and path
+        This method is called internally to validate the command and path.
 
+        Raises:
+            ValueError: if the path is missing
+            ValueError: if the path does not exist
+            ValueError: if the command is invalid
+        """
         # validate for path
         match Metrics.path:
             case None:
