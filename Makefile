@@ -13,6 +13,6 @@ prepare:
 	uv run pytest src/tests
 
 example:
-	uv run langcheck metrics --file ./example/ai_disclaimer.txt --command ai_disclaimer_similarity
-	uv run langcheck metrics --file ./example/sentiment.txt --command sentiment
-	uv run langcheck metrics --file ./example/toxicity.txt --command toxicity
+	uv run langcheck metrics --file ./example/ai_disclaimer.txt -n ai_disclaimer_similarity
+	uv run langcheck metrics --file ./example/sentiment.txt -n sentiment -u 0.5
+	uv run langcheck metrics --file ./example/toxicity.txt -n toxicity -l 0.3
