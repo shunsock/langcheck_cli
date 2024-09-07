@@ -8,7 +8,7 @@ from langcheck_cli.router import Router
 
 def test_default_evaluation_controller() -> None:
     """
-    引数が指定されなかった場合、HelpMessageControllerが返されることをテストします。
+    test return HelpMessageController when no arguments are specified
     """
     with patch('sys.argv', ['router.py']):
         controller = Router.route()
@@ -17,7 +17,7 @@ def test_default_evaluation_controller() -> None:
 
 def test_help_option_evaluation_controller() -> None:
     """
-    引数に-hか--helpが指定された場合、HelpMessageControllerが返されることをテストします。
+    test return HelpMessageController when -h or --help is specified as an argument
     """
     with patch('sys.argv', ['router.py', '-h']):
         controller = Router.route()
@@ -30,7 +30,7 @@ def test_help_option_evaluation_controller() -> None:
 
 def test_argument_option_evaluation_controller() -> None:
     """
-    引数にargumentが指定された場合、ArgumentControllerが返されることをテストします。
+    test return ArgumentController when argument is specified as an argument
     """
     with patch('sys.argv', ['router.py', 'argument']):
         controller = Router.route()
@@ -39,8 +39,8 @@ def test_argument_option_evaluation_controller() -> None:
 
 def test_metrics_option_evaluation_controller() -> None:
     """
-    引数にmetricsが指定された場合、MetricsControllerが返されることをテストします。
+    test return MetricsController when metrics is specified as an argument
     """
-    with patch('sys.argv', ['router.py', 'metrics', '-c', 'toxicity', '-f', 'README.md']):
+    with patch('sys.argv', ['router.py', 'metrics', '-n', 'toxicity', '-f', 'README.md']):
         controller = Router.route()
         assert isinstance(controller, Metrics)

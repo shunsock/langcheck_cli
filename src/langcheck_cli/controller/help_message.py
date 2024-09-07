@@ -7,9 +7,17 @@ class HelpMessage(Controller):
 
     def run(self) -> None:
         message = """
-        Usage: uv run langcheck_cli [options] [target] ...
-        Options:
-            -h, --help      show help message
-            -u, --url       source url to extract images
-        """
+Usage: uv run langcheck_cli [options] [sub_commend] ...
+Options:
+    -h, --help      show help message
+
+Subcommands:
+    metrics:
+        show metrics of the target
+        
+        -n, --name          metrics
+        -f, --file          file path
+        -u, --upper-than    show metrics of the target that is upper than the value
+        -l, --lower-than    show metrics of the target that is lower than the value
+"""
         print(message)
