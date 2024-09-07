@@ -14,6 +14,7 @@ class Metrics(Controller):
     command: Optional[str] = None
     path: Optional[Path] = None
     threshold: Optional[float] = None
+    upper_than: bool = False
 
     def __init__(self, user_inputs: List[str]) -> None:
         super().__init__()
@@ -49,11 +50,18 @@ class Metrics(Controller):
                     Metrics.command = value
                 case "-f" | "--file":
                     Metrics.path = Path(value)
-                case "-t" | "--threshold":
-                    if not value.isdigit():
-                        raise ValueError(f"flag {flag} requires a float value")
+                case "-u" | "--upper-than":
+                    if not value.replace(".", "", 1).isdigit():
+                        raise ValueError(f"flag {value} requires a float value")
 
                     Metrics.threshold = float(value)
+                    Metrics.upper_than = True
+                case "-l" | "--lower-than":
+                    if not value.replace(".", "", 1).isdigit():
+                        raise ValueError(f"flag {value} requires a float value")
+
+                    Metrics.threshold = float(value)
+                    Metrics.upper_than = False
                 case _:
                     raise ValueError(f"flag {flag} is invalid")
 
@@ -93,10 +101,16 @@ class Metrics(Controller):
 
         match Metrics.command:
             case "toxicity":
-                ToxicityCalculator.calculate(texts, Metrics.threshold)
+                ToxicityCalculator.calculate(
+                    texts, Metrics.threshold, Metrics.upper_than
+                )
             case "sentiment":
-                SentimentCalculator.calculate(texts, Metrics.threshold)
+                SentimentCalculator.calculate(
+                    texts, Metrics.threshold, Metrics.upper_than
+                )
             case "ai_disclaimer_similarity":
-                AiDisclaimerSimilarityCalculator.calculate(texts, Metrics.threshold)
+                AiDisclaimerSimilarityCalculator.calculate(
+                    texts, Metrics.threshold, Metrics.upper_than
+                )
             case _:
                 pass
