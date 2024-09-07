@@ -2,6 +2,12 @@ from pathlib import Path
 from typing import List, Optional
 
 from langcheck_cli.controller.controller import Controller
+from langcheck_cli.service.ai_disclaimer_similarity_calculator import (
+    AiDisclaimerSimilarityCalculator,
+)
+from langcheck_cli.service.get_lines_from_text_file import GetLinesFromTextFile
+from langcheck_cli.service.sentiment_calculator import SentimentCalculator
+from langcheck_cli.service.toxicity_calculator import ToxicityCalculator
 
 
 class Metrics(Controller):
@@ -77,6 +83,14 @@ class Metrics(Controller):
                 raise ValueError(f"command {Metrics.command} is invalid")
 
     def run(self) -> None:
-        print("from Metrics")
-        print(f"command: {Metrics.command}")
-        print(f"path: {Metrics.path}")
+        texts = GetLinesFromTextFile.read_file_lines(str(Metrics.path))
+
+        match Metrics.command:
+            case "toxicity":
+                ToxicityCalculator.calculate(texts)
+            case "sentiment":
+                SentimentCalculator.calculate(texts)
+            case "ai_disclaimer_similarity":
+                AiDisclaimerSimilarityCalculator.calculate(texts)
+            case _:
+                pass
