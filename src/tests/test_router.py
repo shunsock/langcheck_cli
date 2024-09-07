@@ -41,6 +41,6 @@ def test_metrics_option_evaluation_controller() -> None:
     """
     引数にmetricsが指定された場合、MetricsControllerが返されることをテストします。
     """
-    with patch('sys.argv', ['router.py', 'metrics']):
+    with patch('sys.argv', ['router.py', 'metrics', '-c', 'toxicity', '-f', 'README.md']):
         controller = Router.route()
         assert isinstance(controller, Metrics)
