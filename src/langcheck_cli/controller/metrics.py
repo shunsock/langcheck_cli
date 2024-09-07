@@ -13,6 +13,7 @@ from langcheck_cli.service.toxicity_calculator import ToxicityCalculator
 class Metrics(Controller):
     command: Optional[str] = None
     path: Optional[Path] = None
+    threshold: Optional[float] = None
 
     def __init__(self, user_inputs: List[str]) -> None:
         super().__init__()
@@ -48,6 +49,11 @@ class Metrics(Controller):
                     Metrics.command = value
                 case "-f" | "--file":
                     Metrics.path = Path(value)
+                case "-t" | "--threshold":
+                    if not value.isdigit():
+                        raise ValueError(f"flag {flag} requires a float value")
+
+                    Metrics.threshold = float(value)
                 case _:
                     raise ValueError(f"flag {flag} is invalid")
 
@@ -87,10 +93,10 @@ class Metrics(Controller):
 
         match Metrics.command:
             case "toxicity":
-                ToxicityCalculator.calculate(texts)
+                ToxicityCalculator.calculate(texts, Metrics.threshold)
             case "sentiment":
-                SentimentCalculator.calculate(texts)
+                SentimentCalculator.calculate(texts, Metrics.threshold)
             case "ai_disclaimer_similarity":
-                AiDisclaimerSimilarityCalculator.calculate(texts)
+                AiDisclaimerSimilarityCalculator.calculate(texts, Metrics.threshold)
             case _:
                 pass
