@@ -11,7 +11,7 @@ from langcheck_cli.service.toxicity_calculator import ToxicityCalculator
 
 
 class Metrics(Controller):
-    command: Optional[str] = None
+    name: Optional[str] = None
     path: Optional[Path] = None
     threshold: Optional[float] = None
     upper_than: bool = False
@@ -46,8 +46,8 @@ class Metrics(Controller):
             value: str = user_inputs[index]
 
             match flag:
-                case "-c" | "--command":
-                    Metrics.command = value
+                case "-n" | "--name":
+                    Metrics.name = value
                 case "-f" | "--file":
                     Metrics.path = Path(value)
                 case "-u" | "--upper-than":
@@ -88,18 +88,18 @@ class Metrics(Controller):
                     raise ValueError(f"file {Metrics.path} does not exist")
 
         # validate for command
-        match Metrics.command:
+        match Metrics.name:
             case None:
                 raise ValueError("command is required")
             case "toxicity" | "sentiment" | "ai_disclaimer_similarity":
                 pass
             case _:
-                raise ValueError(f"command {Metrics.command} is invalid")
+                raise ValueError(f"command {Metrics.name} is invalid")
 
     def run(self) -> None:
         texts = GetLinesFromTextFile.read_file_lines(str(Metrics.path))
 
-        match Metrics.command:
+        match Metrics.name:
             case "toxicity":
                 ToxicityCalculator.calculate(
                     texts, Metrics.threshold, Metrics.upper_than
