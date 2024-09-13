@@ -11,7 +11,7 @@ class SentimentCalculator:
     def calculate(
         texts: List[str], threshold: Optional[float], upper_than: bool
     ) -> None:
-        df = langcheck.metrics.sentiment(texts).to_df()
+        df = langcheck.metrics.ja.sentiment(texts).to_df()
 
         # filter by threshold
         if threshold is not None and upper_than is True:
@@ -19,4 +19,4 @@ class SentimentCalculator:
         if threshold is not None and upper_than is False:
             df = df[df["metric_value"] < threshold]
 
-        print(df)
+        print(df[["generated_output", "metric_value"]])
