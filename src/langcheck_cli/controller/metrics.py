@@ -8,6 +8,7 @@ from langcheck_cli.service.ai_disclaimer_similarity_calculator import (
 from langcheck_cli.service.get_lines_from_text_file import GetLinesFromTextFile
 from langcheck_cli.service.sentiment_calculator import SentimentCalculator
 from langcheck_cli.service.toxicity_calculator import ToxicityCalculator
+from langcheck_cli.service.fluency_calculator import FluencyCalculator
 
 
 class Metrics(Controller):
@@ -91,7 +92,7 @@ class Metrics(Controller):
         match Metrics.name:
             case None:
                 raise ValueError("command is required")
-            case "toxicity" | "sentiment" | "ai_disclaimer_similarity":
+            case "toxicity" | "sentiment" | "ai_disclaimer_similarity" | "fluency":
                 pass
             case _:
                 raise ValueError(f"command {Metrics.name} is invalid")
@@ -110,6 +111,10 @@ class Metrics(Controller):
                 )
             case "ai_disclaimer_similarity":
                 AiDisclaimerSimilarityCalculator.calculate(
+                    texts, Metrics.threshold, Metrics.upper_than
+                )
+            case "fluency":
+                FluencyCalculator.calculate(
                     texts, Metrics.threshold, Metrics.upper_than
                 )
             case _:
